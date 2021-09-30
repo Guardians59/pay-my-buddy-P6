@@ -1,0 +1,68 @@
+.top {
+  height: 30px;
+  background-color: black;
+}
+
+.titre {
+  text-align: center;
+  margin-top: -22px;
+  color: grey;
+}
+
+.menu {
+  margin-top: 55px;
+  border: 2px solid green;
+  border-radius: 5px;
+}
+
+.btn-custom {
+  margin: auto;
+  width: auto;
+  margin-top: 55px;
+  margin-bottom:55px;
+}
+
+.flex-nowrap-email {
+  margin: auto;
+  width: auto;
+  padding-left: 120px;
+  padding-right: 120px;
+}
+
+.flex-nowrap-password {
+  margin: auto;
+  width: auto;
+  padding-left: 120px;
+  padding-right: 120px;
+  margin-top: 10px;
+}
+
+.input {
+  margin:auto;
+  width: 600px;
+}
+
+.check {
+  margin: auto;
+  width: auto;
+  margin-top: 20px;
+  margin-bottom: 55px;
+}
+
+.btn-login {
+  width: auto;
+  margin:auto;
+  margin-bottom: 50px;
+}
+
+
+@media screen and (max-width:700px) {
+  .flex-nowrap-email {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .flex-nowrap-password {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
