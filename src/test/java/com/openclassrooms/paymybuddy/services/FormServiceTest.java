@@ -11,83 +11,110 @@ import com.openclassrooms.paymybuddy.models.UserModel;
 
 @SpringBootTest
 public class FormServiceTest {
-    
+
     @Autowired
     IFormService formService;
-    
+
     @Test
     @DisplayName("Test du formulaire register complet")
     public void formRegisterValidTest() {
-	//GIVEN
+	// GIVEN
 	boolean result;
 	UserModel user = new UserModel();
 	user.setEmail("test90@gmail.com");
 	user.setPassword("abcd");
 	user.setFirstName("test");
 	user.setLastName("form");
-	//WHEN
+	// WHEN
 	result = formService.formRegisterValid(user);
-	//THEN
+	// THEN
 	assertEquals(result, true);
     }
-    
+
     @Test
     @DisplayName("Test de l'erreur mdp manquant au formulaire register")
     public void formRegisterErrorPasswordBlankTest() {
-	//GIVEN
+	// GIVEN
 	boolean result;
 	UserModel user = new UserModel();
 	user.setEmail("test90@gmail.com");
 	user.setFirstName("test");
 	user.setLastName("form");
-	//WHEN
+	// WHEN
 	result = formService.formRegisterValid(user);
-	//THEN
+	// THEN
 	assertEquals(result, false);
     }
-    
+
     @Test
     @DisplayName("Test de l'erreur email manquant au formulaire register")
     public void formRegisterEmailBlankTest() {
-	//GIVEN
+	// GIVEN
 	boolean result;
 	UserModel user = new UserModel();
 	user.setPassword("abcd");
 	user.setFirstName("test");
 	user.setLastName("form");
-	//WHEN
+	// WHEN
 	result = formService.formRegisterValid(user);
-	//THEN
+	// THEN
 	assertEquals(result, false);
     }
-    
+
     @Test
     @DisplayName("Test de l'erreur prénom manquant au formulaire register")
     public void formRegisterFirstNameBlankTest() {
-	//GIVEN
+	// GIVEN
 	boolean result;
 	UserModel user = new UserModel();
 	user.setEmail("test90@gmail.com");
 	user.setPassword("abcd");
 	user.setLastName("form");
-	//WHEN
+	// WHEN
 	result = formService.formRegisterValid(user);
-	//THEN
+	// THEN
 	assertEquals(result, false);
     }
-    
+
     @Test
     @DisplayName("Test de l'erreur nom manquant au formulaire register")
     public void formRegisterLastNameBlankTest() {
-	//GIVEN
+	// GIVEN
 	boolean result;
 	UserModel user = new UserModel();
 	user.setEmail("test90@gmail.com");
 	user.setPassword("abcd");
 	user.setFirstName("test");
-	//WHEN
+	// WHEN
 	result = formService.formRegisterValid(user);
-	//THEN
+	// THEN
+	assertEquals(result, false);
+    }
+
+    @Test
+    @DisplayName("Test du formulaire index complet")
+    public void formConnectionValidTest() {
+	// GIVEN
+	boolean result;
+	UserModel user = new UserModel();
+	user.setEmail("test@gmail.com");
+	user.setPassword("azerty");
+	// WHEN
+	result = formService.formConnectionValid(user);
+	// THEN
+	assertEquals(result, true);
+    }
+
+    @Test
+    @DisplayName("Test erreur formulaire index incomplet")
+    public void formConnectionInvalidTest() {
+	// GIVEN
+	boolean result;
+	UserModel user = new UserModel();
+	user.setEmail("test@gmail.com");
+	// WHEN
+	result = formService.formConnectionValid(user);
+	// THEN
 	assertEquals(result, false);
     }
 

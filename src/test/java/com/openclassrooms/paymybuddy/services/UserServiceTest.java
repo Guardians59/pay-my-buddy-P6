@@ -60,5 +60,66 @@ public class UserServiceTest {
 	//THEN
 	assertEquals(result, false);
     }
+    
+    @Test
+    @DisplayName("Test field manquant lors de l'inscription")
+    public void addUserErrorFieldTest() {
+	//GIVEN
+	UserModel newUser = new UserModel();
+	newUser.setEmail("test45@gmail.com");
+	newUser.setFirstName("New");
+	String password = "Azerty45";
+	newUser.setPassword(password);
+	boolean result;
+	//WHEN
+	result = userService.addUser(newUser);
+	//THEN
+	assertEquals(result, false);
+    }
+    
+    @Test
+    @DisplayName("Test de connexion d'un utilisateur enregistré")
+    public void getExistingUserWantConnectTest() {
+	//GIVEN
+	UserModel user = new UserModel();
+	user.setEmail("test2@gmail.com");
+	String password = "azerty2";
+	user.setPassword(password);
+	boolean result;
+	//WHEN
+	result = userService.userExist(user);
+	//THEN
+	assertEquals(result, true);
+    }
+    
+    @Test
+    @DisplayName("Test erreur de mdp d'un utilisateur enregistré")
+    public void getErrorPasswordTest() {
+	//GIVEN
+	UserModel user = new UserModel();
+	user.setEmail("test@gmail.com");
+	String password = "Error";
+	user.setPassword(password);
+	boolean result;
+	//WHEN
+	result = userService.userExist(user);
+	//THEN
+	assertEquals(result, false);
+    }
+    
+    @Test
+    @DisplayName("Test erreur lors de la tentative de connexion d'un utilisateur non enregistré")
+    public void getNotExistingUserWantConnectTest() {
+	//GIVEN
+	UserModel user = new UserModel();
+	user.setEmail("test800@gmail.com");
+	String password = "azerty80";
+	user.setPassword(password);
+	boolean result;
+	//WHEN
+	result = userService.userExist(user);
+	//THEN
+	assertEquals(result, false);
+    }
 
 }

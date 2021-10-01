@@ -5,5 +5,7 @@ import com.openclassrooms.paymybuddy.models.UserModel;
 public interface IUserService {
     
     public boolean addUser(UserModel user);
+    
+    public boolean userExist(UserModel userConnection);
 
 }

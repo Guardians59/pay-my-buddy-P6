@@ -28,7 +28,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public boolean addUser(UserModel user) {
-	
+
 	boolean result = false;
 	boolean formRegister;
 	formRegister = formService.formRegisterValid(user);
@@ -40,7 +40,7 @@ public class UserServiceImpl implements IUserService {
 	    String sha256hexEmail = DigestUtils.sha256Hex(email);
 	    UserModel userRegistred = userRepository.getByEmail(sha256hexEmail);
 	    logger.debug("User registration with email " + email);
-	    
+
 	    if (userRegistred == null) {
 		newUser.setEmail(sha256hexEmail);
 		newUser.setFirstName(user.getFirstName());
@@ -51,7 +51,7 @@ public class UserServiceImpl implements IUserService {
 		userRepository.save(newUser);
 		result = true;
 		logger.info("Successful registration");
-		
+
 	    } else {
 		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		logger.error("The specified email already belongs to a registered user");
@@ -65,4 +65,35 @@ public class UserServiceImpl implements IUserService {
 	return result;
     }
 
+    @Override
+    public boolean userExist(UserModel userConnection) {
+	boolean result = false;
+	boolean formConnection;
+	formConnection = formService.formConnectionValid(userConnection);
+
+	if (formConnection == true) {
+	    String email = userConnection.getEmail();
+	    String sha256hexEmail = DigestUtils.sha256Hex(email);
+	    UserModel user = new UserModel();
+	    user = userRepository.getByEmail(sha256hexEmail);
+	    logger.debug("User login with email " + userConnection.getEmail());
+
+	    if (user != null) {
+		String password = userConnection.getPassword();
+		String sha256hex = DigestUtils.sha256Hex(password);
+		if (sha256hex.equals(user.getPassword())) {
+		    result = true;
+		    logger.info("User exists in database, successful login");
+		} else {
+		    logger.error("Incorrect password");
+		}
+	    } else {
+		logger.error("Incorrect authentication, no user found with this email");
+	    }
+	} else {
+	    logger.error("Error, please complete all connection fields");
+	}
+
+	return result;
+    }
 }

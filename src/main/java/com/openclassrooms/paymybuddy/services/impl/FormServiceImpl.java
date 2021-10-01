@@ -27,4 +27,16 @@ public class FormServiceImpl implements IFormService {
 	return result;
     }
 
+    @Override
+    public boolean formConnectionValid(UserModel userConnection) {
+	boolean result = true;
+
+	if ((userConnection.getEmail() == null || userConnection.getEmail().isBlank())
+		|| (userConnection.getPassword() == null || userConnection.getPassword().isBlank())) {
+
+	    result = false;
+	}
+	return result;
+    }
+
 }
