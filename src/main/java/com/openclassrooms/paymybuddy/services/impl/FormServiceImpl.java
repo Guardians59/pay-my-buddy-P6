@@ -3,6 +3,7 @@ package com.openclassrooms.paymybuddy.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.openclassrooms.paymybuddy.models.TransferMoneyModel;
 import com.openclassrooms.paymybuddy.models.UserModel;
 import com.openclassrooms.paymybuddy.repository.IUserRepository;
 import com.openclassrooms.paymybuddy.services.IFormService;
@@ -33,6 +34,20 @@ public class FormServiceImpl implements IFormService {
 
 	if ((userConnection.getEmail() == null || userConnection.getEmail().isBlank())
 		|| (userConnection.getPassword() == null || userConnection.getPassword().isBlank())) {
+
+	    result = false;
+	}
+	return result;
+    }
+
+    @Override
+    public boolean formTransferMoneyValid(TransferMoneyModel transferMoney) {
+	boolean result = true;
+
+	if ((transferMoney.getIbanAccount() == null || transferMoney.getIbanAccount().isBlank())
+		|| (transferMoney.getFirstNameIbanAccount() == null || transferMoney.getFirstNameIbanAccount().isBlank())
+		|| (transferMoney.getLastNameIbanAccount() == null || transferMoney.getLastNameIbanAccount().isBlank())
+		|| (transferMoney.getAmountTransfer() <= 0)) {
 
 	    result = false;
 	}

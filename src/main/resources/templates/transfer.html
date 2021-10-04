@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmls:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" name="viewport"
+	content="width=device-width, initial-scale=1" />
+<title>Transfer Money</title>
+
+<!-- css -->
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/css/styleTransfer.css}" />
+</head>
+<body>
+	<div class="container-fluid top">
+		<div class="bi bi-circle-fill">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-circle-fill" viewBox="0 0 16 16">
+         <circle cx="8" cy="8" r="8" />
+        </svg>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-circle-fill" viewBox="0 0 16 16">
+         <circle cx="8" cy="8" r="8" />
+        </svg>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-circle-fill" viewBox="0 0 16 16">
+         <circle cx="8" cy="8" r="8" />
+        </svg>
+		</div>
+		<div class="Titre titre">
+			<h5>Pay My Buddy</h5>
+		</div>
+	</div>
+
+	<div class="container menu col-lg-6 col-md-8 col-10">
+		<div class="row">
+			<div class="button btn-custom">
+			 <a href="home">
+				<button type="button" class="btn btn-success">Pay My Buddy</button>
+				</a>
+			</div>
+		</div>
+
+		<form action="#" th:action="@{transfer}" method="post"
+			th:object="${transferMoneyModel}">
+
+			<div th:if="${transferError}">
+				<p style="color: red;" th:text="${transferError}" align="center"></p>
+			</div>
+			<div th:if="${transferFieldError}">
+				<p style="color: red;" th:text="${transferFieldError}" align="center"></p>
+			</div>
+
+			<div class="input-group col-sm-12 flex-nowrap-iban">
+
+				<span class="input-group-text" id="addon-wrapping"> <svg
+						xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+						fill="currentColor" class="bi bi-bank" viewBox="0 0 16 16">
+  <path
+							d="M8 .95 14.61 4h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.379l.5 2A.5.5 0 0 1 15.5 17H.5a.5.5 0 0 1-.485-.621l.5-2A.5.5 0 0 1 1 14V7H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 4h.89L8 .95zM3.776 4h8.447L8 2.05 3.776 4zM2 7v7h1V7H2zm2 0v7h2.5V7H4zm3.5 0v7h1V7h-1zm2 0v7H12V7H9.5zM13 7v7h1V7h-1zm2-1V5H1v1h14zm-.39 9H1.39l-.25 1h13.72l-.25-1z" />
+</svg>
+				</span> <input type="text" th:field="*{ibanAccount}" class="form-control"
+					placeholder="Iban Account" aria-label="text"
+					aria-describedby="addon-wrapping">
+
+
+			</div>
+
+			<div class="input-group col-sm-12 flex-nowrap-firstName">
+
+				<span class="input-group-text" id="addon-wrapping"> <svg
+						xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+						fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+       <path
+							d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+      </svg>
+
+				</span> <input type="text" th:field="*{firstNameIbanAccount}"
+					class="form-control" placeholder="FirstName" aria-label="text"
+					aria-describedby="addon-wrapping">
+
+
+			</div>
+
+			<div class="input-group col-sm-12 flex-nowrap-lastName">
+
+				<span class="input-group-text" id="addon-wrapping"> <svg
+						xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+						fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+       <path
+							d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+      </svg>
+				</span> <input type="text" th:field="*{lastNameIbanAccount}"
+					class="form-control" placeholder="LastName" aria-label="text"
+					aria-describedby="addon-wrapping">
+
+			</div>
+
+			<div class="input-group col-10 flex-nowrap-number">
+			<span class="input-group-text" id="addon-wrapping">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+					fill="currentColor" class="bi bi-cash" viewBox="0 0 16 16">
+  <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+  <path
+						d="M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2H3z" />
+</svg>
+				</span><input type="number" th:field="*{amountTransfer}"
+					class="form-control number-custom" placeholder="0" step=".01"
+					aria-label="number" aria-describedby="addon-wrapping">
+			</div>
+
+			<div class="row">
+				<div class="button btn-send">
+					<button class="btn btn-success" type="submit">Transfer</button>
+
+				</div>
+			</div>
+		</form>
+	</div>
+
+</body>
+</html>
