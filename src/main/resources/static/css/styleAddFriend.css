@@ -1,0 +1,55 @@
+.top {
+	height: 30px;
+	background-color: black;
+}
+
+.titre {
+	text-align: center;
+	margin-top: -22px;
+	color: grey;
+}
+
+.titre-page {
+	text-align: center;
+	margin-top: 30px;
+}
+
+.menu {
+	margin-top: 40px;
+	border: 2px solid green;
+	border-radius: 5px;
+}
+
+.btn-custom {
+	margin: auto;
+	width: auto;
+	margin-top: 40px;
+	margin-bottom: 10px;
+}
+
+.flex-nowrap-email {
+	margin: auto;
+	width: auto;
+	padding-left: 120px;
+	padding-right: 120px;
+	margin-top: 10px;
+}
+
+.input {
+	margin: auto;
+	width: 600px;
+}
+
+.btn-login {
+	width: auto;
+	margin: auto;
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+
+@media screen and (max-width:700px) {
+	.flex-nowrap-email {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
