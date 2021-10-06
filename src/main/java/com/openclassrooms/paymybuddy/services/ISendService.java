@@ -13,5 +13,7 @@ public interface ISendService {
     public boolean transferMoneyInWallet(String email, TransferMoneyModel transferMoney);
     
     public boolean sendMoney(String email, SendInfosModel sendInfos);
+    
+    public boolean withdrawMoneyInBankAccount(String email, TransferMoneyModel transferMoney);
 
 }

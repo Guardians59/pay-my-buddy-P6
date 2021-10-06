@@ -138,13 +138,13 @@ public class SendServiceImpl implements ISendService {
 	    send.setAmountSampling(roundSampling);
 	    send.setDescription(sendInfos.getDescription());
 	    sendRepository.save(send);
-	    
+
 	    userAuthor.setWallet(userAuthor.getWallet() - roundResult);
 	    listUpdateUserDB.add(userAuthor);
 	    userRecipient.setWallet(userRecipient.getWallet() + sendInfos.getSendAmount());
 	    listUpdateUserDB.add(userRecipient);
 	    userRepository.saveAll(listUpdateUserDB);
-	    
+
 	    result = true;
 	    logger.info("Send of user " + userAuthor.getFirstName() + " " + userAuthor.getLastName() + " to "
 		    + userRecipient.getFirstName() + " " + userRecipient.getLastName() + " successfully");
@@ -157,5 +157,44 @@ public class SendServiceImpl implements ISendService {
 
 	return result;
     }
+
+    @Override
+    @Transactional
+    public boolean withdrawMoneyInBankAccount(String email, TransferMoneyModel transferMoney) {
+	boolean result = false;
+	boolean formWithdraw;
+	formWithdraw = formService.formTransferMoneyValid(transferMoney);
+
+	if (formWithdraw == true) {
+	    String sha256hexEmail = DigestUtils.sha256Hex(email);
+	    UserModel user = new UserModel();
+	    user = userRepository.getByEmail(sha256hexEmail);
+	    logger.debug("The user " + email + " recover in its bank account a amount total of "
+		    + transferMoney.getAmountTransfer());
+	    
+	    if (user.getFirstName().equals(transferMoney.getFirstNameIbanAccount())
+		    && user.getLastName().equals(transferMoney.getLastNameIbanAccount())) {
+		
+		if (user.getWallet() >= transferMoney.getAmountTransfer()) {
+		    double moneyNow = user.getWallet();
+		    user.setWallet(moneyNow - transferMoney.getAmountTransfer());
+		    userRepository.save(user);
+		    result = true;
+		    logger.info("WithDraw validated with successfully");
+		} else {
+		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		    logger.error(
+			    "The balance is insufficient to be able to withdraw this amount from the bank account");
+		} } else {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			logger.error("Error please enter your firstname and lastname from your bank account");
+		    }
+		} else {
+		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		    logger.error("Error, please complete all information fields");
+		}
+	    
+	return result;
+	}
 
 }
