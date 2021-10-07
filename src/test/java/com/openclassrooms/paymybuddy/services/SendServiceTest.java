@@ -149,6 +149,33 @@ public class SendServiceTest {
     }
     
     @Test
+    @DisplayName("Test de l'erreur, montant égal à zéro")
+    public void sendErrorAmountIsNullTest() {
+	//GIVEN
+	boolean result;
+	String email = "test@gmail.com";
+	String emailFriend = "test2@gmail.com";
+	SendInfosModel sendInfos = new SendInfosModel();
+	sendInfos.setIdRecipient(2);
+	sendInfos.setDescription("TestError");
+	sendInfos.setSendAmount(0);
+	String sha256hexEmail = DigestUtils.sha256Hex(email);
+	UserModel user = userRepository.getByEmail(sha256hexEmail);
+	double moneyBeforeTransfer = user.getWallet();
+	String sha256hexEmailFriend = DigestUtils.sha256Hex(emailFriend);
+	UserModel userFriend = userRepository.getByEmail(sha256hexEmailFriend);
+	double moneyFriendBeforeTransfer = userFriend.getWallet();
+	//WHEN
+	result = sendService.sendMoney(email, sendInfos);
+	user = userRepository.getByEmail(sha256hexEmail);
+	userFriend = userRepository.getByEmail(sha256hexEmailFriend);
+	//THEN
+	assertEquals(result, false);
+	assertEquals(moneyBeforeTransfer, user.getWallet());
+	assertEquals(moneyFriendBeforeTransfer, userFriend.getWallet());
+    }
+    
+    @Test
     @DisplayName("Test du transfert d'argent vers le compte en banque")
     public void transferMoneyInBankAccountTest() {
 	//GIVEN

@@ -78,6 +78,9 @@
 			<div th:if="${sendError}">
 				<p style="color: red;" th:text="${sendError}" align="center"></p>
 			</div>
+			<div th:if="${sendAmountError}">
+				<p style="color: red;" th:text="${sendAmountError}" align="center"></p>
+			</div>
 			<div th:if="${sendSucces}">
 				<p style="color: green;" th:text="${sendSucces}" align="center"></p>
 			</div>

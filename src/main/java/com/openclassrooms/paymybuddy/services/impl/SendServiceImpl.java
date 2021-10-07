@@ -111,48 +111,54 @@ public class SendServiceImpl implements ISendService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public boolean sendMoney(String email, SendInfosModel sendInfos) {
 	boolean result = false;
-	UserModel userAuthor = new UserModel();
-	String sha256hexEmail = DigestUtils.sha256Hex(email);
-	userAuthor = userRepository.getByEmail(sha256hexEmail);
-	int idFriend = sendInfos.getIdRecipient();
-	Optional<UserModel> userFriend = userRepository.findById(idFriend);
-	UserModel userRecipient = new UserModel();
-	userRecipient = userFriend.get();
+	boolean formSendValid = formService.formSendValid(sendInfos);
+	if (formSendValid == true) {
+	    UserModel userAuthor = new UserModel();
+	    String sha256hexEmail = DigestUtils.sha256Hex(email);
+	    userAuthor = userRepository.getByEmail(sha256hexEmail);
+	    int idFriend = sendInfos.getIdRecipient();
+	    Optional<UserModel> userFriend = userRepository.findById(idFriend);
+	    UserModel userRecipient = new UserModel();
+	    userRecipient = userFriend.get();
 
-	logger.debug("The user " + userAuthor.getFirstName() + " " + userAuthor.getLastName() + " sends to "
-		+ userRecipient.getFirstName() + " " + userRecipient.getLastName());
+	    logger.debug("The user " + userAuthor.getFirstName() + " " + userAuthor.getLastName() + " sends to "
+		    + userRecipient.getFirstName() + " " + userRecipient.getLastName());
 
-	List<UserModel> listUpdateUserDB = new ArrayList<>();
-	double sampling = (sendInfos.getSendAmount() * 0.5) / 100;
-	double resultWithSampling = sendInfos.getSendAmount() + sampling;
-	double roundResult = Precision.round(resultWithSampling, 2);
-	double roundSampling = Precision.round(sampling, 2);
+	    List<UserModel> listUpdateUserDB = new ArrayList<>();
+	    double sampling = (sendInfos.getSendAmount() * 0.5) / 100;
+	    double resultWithSampling = sendInfos.getSendAmount() + sampling;
+	    double roundResult = Precision.round(resultWithSampling, 2);
+	    double roundSampling = Precision.round(sampling, 2);
 
-	if (userAuthor.getWallet() >= roundResult) {
-	    SendModel send = new SendModel();
-	    send.setIdAuthor(userAuthor.getId());
-	    send.setIdRecipient(userRecipient.getId());
-	    java.sql.Date dateSQL = new java.sql.Date(new Date().getTime());
-	    send.setDate(dateSQL);
-	    send.setAmountSend(sendInfos.getSendAmount());
-	    send.setAmountSampling(roundSampling);
-	    send.setDescription(sendInfos.getDescription());
-	    sendRepository.save(send);
+	    if (userAuthor.getWallet() >= roundResult) {
+		SendModel send = new SendModel();
+		send.setIdAuthor(userAuthor.getId());
+		send.setIdRecipient(userRecipient.getId());
+		java.sql.Date dateSQL = new java.sql.Date(new Date().getTime());
+		send.setDate(dateSQL);
+		send.setAmountSend(sendInfos.getSendAmount());
+		send.setAmountSampling(roundSampling);
+		send.setDescription(sendInfos.getDescription());
+		sendRepository.save(send);
 
-	    userAuthor.setWallet(userAuthor.getWallet() - roundResult);
-	    listUpdateUserDB.add(userAuthor);
-	    userRecipient.setWallet(userRecipient.getWallet() + sendInfos.getSendAmount());
-	    listUpdateUserDB.add(userRecipient);
-	    userRepository.saveAll(listUpdateUserDB);
+		userAuthor.setWallet(userAuthor.getWallet() - roundResult);
+		listUpdateUserDB.add(userAuthor);
+		userRecipient.setWallet(userRecipient.getWallet() + sendInfos.getSendAmount());
+		listUpdateUserDB.add(userRecipient);
+		userRepository.saveAll(listUpdateUserDB);
 
-	    result = true;
-	    logger.info("Send of user " + userAuthor.getFirstName() + " " + userAuthor.getLastName() + " to "
-		    + userRecipient.getFirstName() + " " + userRecipient.getLastName() + " successfully");
+		result = true;
+		logger.info("Send of user " + userAuthor.getFirstName() + " " + userAuthor.getLastName() + " to "
+			+ userRecipient.getFirstName() + " " + userRecipient.getLastName() + " successfully");
 
+	    } else {
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		logger.error("The amount " + sendInfos.getSendAmount() + " is greater than the user’s balance "
+			+ userAuthor.getWallet());
+	    }
 	} else {
 	    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-	    logger.error("The amount " + sendInfos.getSendAmount() + " is greater than the user’s balance "
-		    + userAuthor.getWallet());
+	    logger.error("The amount must be greater than 0");
 	}
 
 	return result;
@@ -171,10 +177,10 @@ public class SendServiceImpl implements ISendService {
 	    user = userRepository.getByEmail(sha256hexEmail);
 	    logger.debug("The user " + email + " recover in its bank account a amount total of "
 		    + transferMoney.getAmountTransfer());
-	    
+
 	    if (user.getFirstName().equals(transferMoney.getFirstNameIbanAccount())
 		    && user.getLastName().equals(transferMoney.getLastNameIbanAccount())) {
-		
+
 		if (user.getWallet() >= transferMoney.getAmountTransfer()) {
 		    double moneyNow = user.getWallet();
 		    user.setWallet(moneyNow - transferMoney.getAmountTransfer());
@@ -185,16 +191,17 @@ public class SendServiceImpl implements ISendService {
 		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		    logger.error(
 			    "The balance is insufficient to be able to withdraw this amount from the bank account");
-		} } else {
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			logger.error("Error please enter your firstname and lastname from your bank account");
-		    }
-		} else {
-		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-		    logger.error("Error, please complete all information fields");
 		}
-	    
-	return result;
+	    } else {
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		logger.error("Error please enter your firstname and lastname from your bank account");
+	    }
+	} else {
+	    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+	    logger.error("Error, please complete all information fields");
 	}
+
+	return result;
+    }
 
 }
