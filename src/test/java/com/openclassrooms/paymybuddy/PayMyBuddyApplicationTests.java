@@ -9,5 +9,10 @@ class PayMyBuddyApplicationTests {
 	@Test
 	void contextLoads() {
 	}
+	
+	@Test
+	public void contextTest() {
+	    PayMyBuddyApplication.main(new String[] {});
+	}
 
 }
