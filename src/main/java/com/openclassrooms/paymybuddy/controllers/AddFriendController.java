@@ -37,7 +37,7 @@ public class AddFriendController {
     }
 
     @PostMapping(value = "addFriend")
-    public String addFriend(@CookieValue(value = "userEmail") String email,
+    public String postAddFriend(@CookieValue(value = "userEmail") String email,
 	    @Valid @ModelAttribute("addFriend") UserModel addFriend, BindingResult bindingResult, Model model) {
 	boolean result = false;
 	String emailFriend = addFriend.getEmail();

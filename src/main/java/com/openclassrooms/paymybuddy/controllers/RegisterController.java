@@ -24,7 +24,7 @@ public class RegisterController {
     IFormService formService;
     
     @GetMapping(value = "register")
-    public String viewRegisterPage(Model model) {
+    public String getRegisterPage(Model model) {
 	UserModel user = new UserModel();
 	model.addAttribute("userModel", user);
 	return "register";

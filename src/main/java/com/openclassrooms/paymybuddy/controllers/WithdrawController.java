@@ -31,7 +31,7 @@ public class WithdrawController {
     IFormService formService;
     
     @GetMapping(value = "withdraw")
-    public String getWithDrawPage(@CookieValue(value = "userEmail") String email, Model model) {
+    public String getWithdrawPage(@CookieValue(value = "userEmail") String email, Model model) {
 	TransferMoneyModel transfer = new TransferMoneyModel();
 	model.addAttribute("transfer", transfer);
 	
@@ -39,7 +39,7 @@ public class WithdrawController {
     }
     
     @PostMapping(value = "withdraw")
-    public String postWithDraw(@CookieValue(value = "userEmail") String email,
+    public String postWithdraw(@CookieValue(value = "userEmail") String email,
 	    @ModelAttribute("transfer") TransferMoneyModel transfer, Model model) {
 	boolean formTransferValid;
 	formTransferValid = formService.formTransferMoneyValid(transfer);
