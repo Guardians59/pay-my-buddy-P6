@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.openclassrooms.paymybuddy.models.SendInfosModel;
+import com.openclassrooms.paymybuddy.models.SendModel;
 import com.openclassrooms.paymybuddy.models.TransferMoneyModel;
 import com.openclassrooms.paymybuddy.models.UserModel;
 import com.openclassrooms.paymybuddy.repository.ISendRepository;
@@ -98,10 +98,10 @@ public class SendServiceTest {
 	boolean result;
 	String email = "test2@gmail.com";
 	String emailFriend = "test@gmail.com";
-	SendInfosModel sendInfos = new SendInfosModel();
+	SendModel sendInfos = new SendModel();
 	sendInfos.setIdRecipient(1);
 	sendInfos.setDescription("Test");
-	sendInfos.setSendAmount(100);
+	sendInfos.setAmountSend(100);
 	String sha256hexEmail = DigestUtils.sha256Hex(email);
 	UserModel user = userRepository.getByEmail(sha256hexEmail);
 	double moneyBeforeTransfer = user.getWallet();
@@ -128,10 +128,10 @@ public class SendServiceTest {
 	boolean result;
 	String email = "test@gmail.com";
 	String emailFriend = "test2@gmail.com";
-	SendInfosModel sendInfos = new SendInfosModel();
+	SendModel sendInfos = new SendModel();
 	sendInfos.setIdRecipient(2);
 	sendInfos.setDescription("TestError");
-	sendInfos.setSendAmount(30000);
+	sendInfos.setAmountSend(30000);
 	String sha256hexEmail = DigestUtils.sha256Hex(email);
 	UserModel user = userRepository.getByEmail(sha256hexEmail);
 	double moneyBeforeTransfer = user.getWallet();
@@ -155,10 +155,10 @@ public class SendServiceTest {
 	boolean result;
 	String email = "test@gmail.com";
 	String emailFriend = "test2@gmail.com";
-	SendInfosModel sendInfos = new SendInfosModel();
+	SendModel sendInfos = new SendModel();
 	sendInfos.setIdRecipient(2);
 	sendInfos.setDescription("TestError");
-	sendInfos.setSendAmount(0);
+	sendInfos.setAmountSend(0);
 	String sha256hexEmail = DigestUtils.sha256Hex(email);
 	UserModel user = userRepository.getByEmail(sha256hexEmail);
 	double moneyBeforeTransfer = user.getWallet();

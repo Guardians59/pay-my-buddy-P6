@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.openclassrooms.paymybuddy.models.FriendNameModel;
 import com.openclassrooms.paymybuddy.models.SendInfosListHomeModel;
-import com.openclassrooms.paymybuddy.models.SendInfosModel;
+import com.openclassrooms.paymybuddy.models.SendModel;
 import com.openclassrooms.paymybuddy.models.UserModel;
 import com.openclassrooms.paymybuddy.services.IFriendListService;
 import com.openclassrooms.paymybuddy.services.ISendService;
@@ -52,7 +52,7 @@ public class AddFriendController {
 
 	    List<FriendNameModel> friendName = friendListService.listFriendName(email);
 	    List<SendInfosListHomeModel> sendInfosList = sendService.sendInfosList(email);
-	    SendInfosModel sendInfos = new SendInfosModel();
+	    SendModel sendInfos = new SendModel();
 	    model.addAttribute("friendName", friendName);
 	    model.addAttribute("sendInfosList", sendInfosList);
 	    model.addAttribute("sendInfos", sendInfos);

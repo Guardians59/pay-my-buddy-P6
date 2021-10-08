@@ -1,6 +1,6 @@
 package com.openclassrooms.paymybuddy.services;
 
-import com.openclassrooms.paymybuddy.models.SendInfosModel;
+import com.openclassrooms.paymybuddy.models.SendModel;
 import com.openclassrooms.paymybuddy.models.TransferMoneyModel;
 import com.openclassrooms.paymybuddy.models.UserModel;
 
@@ -12,6 +12,6 @@ public interface IFormService {
     
     public boolean formTransferMoneyValid(TransferMoneyModel transferMoney);
     
-    public boolean formSendValid(SendInfosModel send);
+    public boolean formSendValid(SendModel sendModel);
 
 }

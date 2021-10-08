@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.openclassrooms.paymybuddy.models.SendInfosModel;
+import com.openclassrooms.paymybuddy.models.SendModel;
 import com.openclassrooms.paymybuddy.repository.ISendRepository;
 
 @SpringBootTest
@@ -33,10 +33,10 @@ public class SendControllerIT {
     public void postSendTest() throws Exception {
 	String email = "test@gmail.com";
 	Cookie cookie = new Cookie("userEmail", email);
-	SendInfosModel sendInfos = new SendInfosModel();
+	SendModel sendInfos = new SendModel();
 	sendInfos.setIdRecipient(2);
 	sendInfos.setDescription("Test intégration");
-	sendInfos.setSendAmount(100);
+	sendInfos.setAmountSend(100);
 	
 	mockMvc.perform(post("/send").contentType(MediaType.APPLICATION_FORM_URLENCODED)
 		.cookie(cookie)
@@ -52,10 +52,10 @@ public class SendControllerIT {
     public void postSendErrorTest() throws Exception {
 	String email = "test@gmail.com";
 	Cookie cookie = new Cookie("userEmail", email);
-	SendInfosModel sendInfos = new SendInfosModel();
+	SendModel sendInfos = new SendModel();
 	sendInfos.setIdRecipient(2);
 	sendInfos.setDescription("Test intégration");
-	sendInfos.setSendAmount(100000);
+	sendInfos.setAmountSend(100000);
 	
 	mockMvc.perform(post("/send").contentType(MediaType.APPLICATION_FORM_URLENCODED)
 		.cookie(cookie)
@@ -71,10 +71,10 @@ public class SendControllerIT {
     public void postSendAmountNullErrorTest() throws Exception {
 	String email = "test@gmail.com";
 	Cookie cookie = new Cookie("userEmail", email);
-	SendInfosModel sendInfos = new SendInfosModel();
+	SendModel sendInfos = new SendModel();
 	sendInfos.setIdRecipient(2);
 	sendInfos.setDescription("Test intégration");
-	sendInfos.setSendAmount(0);
+	sendInfos.setAmountSend(0);
 	
 	mockMvc.perform(post("/send").contentType(MediaType.APPLICATION_FORM_URLENCODED)
 		.cookie(cookie)

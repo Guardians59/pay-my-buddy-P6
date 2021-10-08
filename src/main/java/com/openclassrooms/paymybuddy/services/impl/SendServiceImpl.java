@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.openclassrooms.paymybuddy.models.SendInfosListHomeModel;
-import com.openclassrooms.paymybuddy.models.SendInfosModel;
 import com.openclassrooms.paymybuddy.models.SendModel;
 import com.openclassrooms.paymybuddy.models.TransferMoneyModel;
 import com.openclassrooms.paymybuddy.models.UserModel;
@@ -109,14 +108,14 @@ public class SendServiceImpl implements ISendService {
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public boolean sendMoney(String email, SendInfosModel sendInfos) {
+    public boolean sendMoney(String email, SendModel sendModel) {
 	boolean result = false;
-	boolean formSendValid = formService.formSendValid(sendInfos);
+	boolean formSendValid = formService.formSendValid(sendModel);
 	if (formSendValid == true) {
 	    UserModel userAuthor = new UserModel();
 	    String sha256hexEmail = DigestUtils.sha256Hex(email);
 	    userAuthor = userRepository.getByEmail(sha256hexEmail);
-	    int idFriend = sendInfos.getIdRecipient();
+	    int idFriend = sendModel.getIdRecipient();
 	    Optional<UserModel> userFriend = userRepository.findById(idFriend);
 	    UserModel userRecipient = new UserModel();
 	    userRecipient = userFriend.get();
@@ -125,8 +124,8 @@ public class SendServiceImpl implements ISendService {
 		    + userRecipient.getFirstName() + " " + userRecipient.getLastName());
 
 	    List<UserModel> listUpdateUserDB = new ArrayList<>();
-	    double sampling = (sendInfos.getSendAmount() * 0.5) / 100;
-	    double resultWithSampling = sendInfos.getSendAmount() + sampling;
+	    double sampling = (sendModel.getAmountSend() * 0.5) / 100;
+	    double resultWithSampling = sendModel.getAmountSend() + sampling;
 	    double roundResult = Precision.round(resultWithSampling, 2);
 	    double roundSampling = Precision.round(sampling, 2);
 
@@ -136,14 +135,14 @@ public class SendServiceImpl implements ISendService {
 		send.setIdRecipient(userRecipient.getId());
 		java.sql.Date dateSQL = new java.sql.Date(new Date().getTime());
 		send.setDate(dateSQL);
-		send.setAmountSend(sendInfos.getSendAmount());
+		send.setAmountSend(sendModel.getAmountSend());
 		send.setAmountSampling(roundSampling);
-		send.setDescription(sendInfos.getDescription());
+		send.setDescription(sendModel.getDescription());
 		sendRepository.save(send);
 
 		userAuthor.setWallet(userAuthor.getWallet() - roundResult);
 		listUpdateUserDB.add(userAuthor);
-		userRecipient.setWallet(userRecipient.getWallet() + sendInfos.getSendAmount());
+		userRecipient.setWallet(userRecipient.getWallet() + sendModel.getAmountSend());
 		listUpdateUserDB.add(userRecipient);
 		userRepository.saveAll(listUpdateUserDB);
 
@@ -153,7 +152,7 @@ public class SendServiceImpl implements ISendService {
 
 	    } else {
 		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-		logger.error("The amount " + sendInfos.getSendAmount() + " is greater than the user’s balance "
+		logger.error("The amount " + sendModel.getAmountSend() + " is greater than the user’s balance "
 			+ userAuthor.getWallet());
 	    }
 	} else {

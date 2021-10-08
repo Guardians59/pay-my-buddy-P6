@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.openclassrooms.paymybuddy.models.FriendNameModel;
 import com.openclassrooms.paymybuddy.models.SendInfosListHomeModel;
-import com.openclassrooms.paymybuddy.models.SendInfosModel;
+import com.openclassrooms.paymybuddy.models.SendModel;
 import com.openclassrooms.paymybuddy.services.IFormService;
 import com.openclassrooms.paymybuddy.services.IFriendListService;
 import com.openclassrooms.paymybuddy.services.ISendService;
@@ -30,7 +30,7 @@ public class SendController {
 
     @PostMapping(value = "send")
     public String postSendToFriend(@CookieValue(value = "userEmail") String email,
-	    @ModelAttribute("sendInfos") SendInfosModel sendInfos, Model model) {
+	    @ModelAttribute("sendInfos") SendModel sendInfos, Model model) {
 
 	boolean result = false;
 	boolean formSendValid;
@@ -43,7 +43,7 @@ public class SendController {
 	    List<SendInfosListHomeModel> sendInfosList = sendService.sendInfosList(email);
 	    model.addAttribute("friendName", friendName);
 	    model.addAttribute("sendInfosList", sendInfosList);
-	    SendInfosModel newSendInfos = new SendInfosModel();
+	    SendModel newSendInfos = new SendModel();
 	    model.addAttribute("sendInfos", newSendInfos);
 	    
 	    return "home";
@@ -53,7 +53,7 @@ public class SendController {
 	    model.addAttribute("friendName", friendName);
 	    model.addAttribute("sendInfosList", sendInfosList);
 	    model.addAttribute("sendSucces", "Envoie effectué avec succès");
-	    SendInfosModel newSendInfos = new SendInfosModel();
+	    SendModel newSendInfos = new SendModel();
 	    model.addAttribute("sendInfos", newSendInfos);
 
 	    return "home";
@@ -63,7 +63,7 @@ public class SendController {
 	    model.addAttribute("friendName", friendName);
 	    model.addAttribute("sendInfosList", sendInfosList);
 	    model.addAttribute("sendError", "Erreur lors de l'envoie, votre solde est insuffisant");
-	    SendInfosModel newSendInfos = new SendInfosModel();
+	    SendModel newSendInfos = new SendModel();
 	    model.addAttribute("sendInfos", newSendInfos);
 
 	    return "home";

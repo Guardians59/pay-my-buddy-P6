@@ -3,7 +3,7 @@ package com.openclassrooms.paymybuddy.services;
 import java.util.List;
 
 import com.openclassrooms.paymybuddy.models.SendInfosListHomeModel;
-import com.openclassrooms.paymybuddy.models.SendInfosModel;
+import com.openclassrooms.paymybuddy.models.SendModel;
 import com.openclassrooms.paymybuddy.models.TransferMoneyModel;
 
 public interface ISendService {
@@ -12,7 +12,7 @@ public interface ISendService {
     
     public boolean transferMoneyInWallet(String email, TransferMoneyModel transferMoney);
     
-    public boolean sendMoney(String email, SendInfosModel sendInfos);
+    public boolean sendMoney(String email, SendModel sendModel);
     
     public boolean withdrawMoneyInBankAccount(String email, TransferMoneyModel transferMoney);
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.openclassrooms.paymybuddy.models.FriendNameModel;
 import com.openclassrooms.paymybuddy.models.SendInfosListHomeModel;
-import com.openclassrooms.paymybuddy.models.SendInfosModel;
+import com.openclassrooms.paymybuddy.models.SendModel;
 import com.openclassrooms.paymybuddy.models.UserModel;
 import com.openclassrooms.paymybuddy.services.IFormService;
 import com.openclassrooms.paymybuddy.services.IFriendListService;
@@ -46,7 +46,7 @@ public class HomeController {
 	model.addAttribute("friendName", friendName);
 	List<SendInfosListHomeModel> sendInfosList = sendService.sendInfosList(email);
 	model.addAttribute("sendInfosList", sendInfosList);
-	SendInfosModel sendInfos = new SendInfosModel();
+	SendModel sendInfos = new SendModel();
 	model.addAttribute("sendInfos", sendInfos);
 
 	return "home";
@@ -70,12 +70,10 @@ public class HomeController {
 	    httpServlet.addCookie(cookie);
 	    List<FriendNameModel> friendName = friendListService.listFriendName(email);
 	    List<SendInfosListHomeModel> sendInfosList = sendService.sendInfosList(email);
-	    SendInfosModel sendInfos = new SendInfosModel();
-	    //AddFriend addFriend = new AddFriend();
+	    SendModel sendInfos = new SendModel();
 	    model.addAttribute("friendName", friendName);
 	    model.addAttribute("sendInfosList", sendInfosList);
 	    model.addAttribute("sendInfos", sendInfos);
-	    //model.addAttribute("addFriend", addFriend);
 
 	    return "home";
 	} else {
