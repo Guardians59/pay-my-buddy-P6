@@ -13,7 +13,13 @@ import com.openclassrooms.paymybuddy.models.UserModel;
 import com.openclassrooms.paymybuddy.repository.IUserRepository;
 import com.openclassrooms.paymybuddy.services.IFormService;
 import com.openclassrooms.paymybuddy.services.IUserService;
-
+/**
+ * La classe UserServiceImpl est l'implémentation de l'interface IUserService.
+ * 
+ * @see IUserService
+ * @author Dylan
+ *
+ */
 @Service
 public class UserServiceImpl implements IUserService {
 
@@ -32,7 +38,14 @@ public class UserServiceImpl implements IUserService {
 	boolean result = false;
 	boolean formRegister;
 	formRegister = formService.formRegisterValid(user);
-
+	/*
+	 * On vérifie que le formulaire contient bien les informations requises,
+	 * puis nous vérifions avec l'email hasher qu'il n'y ai pas d'utilisateur
+	 * déjà enregistré en base de donnée avec cet email, dans ce cas nous
+	 * ajoutons les données inscrites dans le formulaire (email hasher, nom, prénom
+	 * et mot de passe hasher) dans une nouvelle instance de la classe model
+	 * de l'entité user afin de l'enregistré en base de donnée.
+	 */
 	if (formRegister == true) {
 
 	    UserModel newUser = new UserModel();
@@ -70,7 +83,12 @@ public class UserServiceImpl implements IUserService {
 	boolean result = false;
 	boolean formConnection;
 	formConnection = formService.formConnectionValid(userConnection);
-
+	/*
+	 * On vérifie que le formulaire contient bien toutes les informations
+	 * requises, nous vérifions dans la base de donnée que l'email hasher
+	 * correspond bien à un utilisateur enregistré, puis nous vérifions que
+	 * son mot de passe hasher est correct pour valider la connection.
+	 */
 	if (formConnection == true) {
 	    String email = userConnection.getEmail();
 	    String sha256hexEmail = DigestUtils.sha256Hex(email);

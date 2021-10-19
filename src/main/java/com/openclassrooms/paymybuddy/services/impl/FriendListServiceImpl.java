@@ -20,7 +20,14 @@ import com.openclassrooms.paymybuddy.repository.IFriendListRepository;
 import com.openclassrooms.paymybuddy.repository.IUserRepository;
 import com.openclassrooms.paymybuddy.services.IFriendListService;
 
-
+/**
+ * La classe FriendListServiceImpl est l'implémentation de l'interface
+ * IFriendListService.
+ * 
+ * @see IFriendListService
+ * @author Dylan
+ *
+ */
 @Service
 public class FriendListServiceImpl implements IFriendListService {
 
@@ -38,10 +45,17 @@ public class FriendListServiceImpl implements IFriendListService {
 	List<Integer> result = new ArrayList<>();
 	String sha256hexEmail = DigestUtils.sha256Hex(email);
 	UserModel user = new UserModel();
+	//On récupère les données de l'utilisateur avec l'email hasher.
 	user = userRepository.getByEmail(sha256hexEmail);
+	//On récupére la liste d'ami de l'utilisateur.
 	result = friendListRepository.getByIdUser(user.getId());
+	//On instancie une liste FriendName pour récupérer les id, noms et prénoms.
 	List<FriendNameModel> listFriendName = new ArrayList<>();
-
+	/*
+	 * Si la liste n'est pas vide, on utilise la boucle forEach afin de récupérer
+	 * chaques id des différents amis pour les retrouver en base de donnée
+	 * et de les ajouter dans liste friendName avec les informations voulues.
+	 */
 	if (!result.isEmpty()) {
 
 	    result.forEach(idList -> {
@@ -69,15 +83,26 @@ public class FriendListServiceImpl implements IFriendListService {
     public boolean addFriend(String emailUser, String emailFriend) {
 	boolean result = false;
 	String sha256hexEmailUser = DigestUtils.sha256Hex(emailUser);
+	//On récupère les données de l'utilisateur avec l'email hasher.
 	UserModel user = userRepository.getByEmail(sha256hexEmailUser);
 	List<Integer> listIdFriend = new ArrayList<>();
+	//On récupère la liste d'amis de l'utilisateur.
 	listIdFriend = friendListRepository.getByIdUser(user.getId());
 	FriendListModel add = new FriendListModel();
+	//On instancie une liste du model de l'entité friendList pour sauvegarder en base donnée.
 	List<FriendListModel> addFriendList = new ArrayList<>();
 	String sha256hexEmailFriend = DigestUtils.sha256Hex(emailFriend);
 	UserModel userFriend = userRepository.getByEmail(sha256hexEmailFriend);
 	logger.debug("User " + emailUser + " add the user " + emailFriend + " as a friend");
-	
+	/*
+	 * On vérifie dans un premier temps que l'utilisateur ne cherche pas à ajouter son propre
+	 * email en tant qu'ami, puis nous vérifions que le mail indiqué correspond bien à
+	 * un utilisateur enregistré, ensuite nous vérifions que l'utilisateur n'est pas déjà
+	 * présent dans la liste d'amis.
+	 * Si tous ceci est correct on ajoute les id de l'utilisateur connecté et celui de l'ami
+	 * dans liste addFriendList afin d'enregistrer les relations d'amitiées dans la
+	 * base de donnée.
+	 */
 	if (!emailUser.equals(emailFriend)) {
 	    
 	    if (userFriend != null) {

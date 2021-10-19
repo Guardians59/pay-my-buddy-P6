@@ -23,7 +23,13 @@ import com.openclassrooms.paymybuddy.repository.ISendRepository;
 import com.openclassrooms.paymybuddy.repository.IUserRepository;
 import com.openclassrooms.paymybuddy.services.IFormService;
 import com.openclassrooms.paymybuddy.services.ISendService;
-
+/**
+ * La classe SendServiceImpl est l'implémentation de l'interface ISendService.
+ * 
+ * @see ISendService
+ * @author Dylan
+ *
+ */
 @Service
 public class SendServiceImpl implements ISendService {
 
@@ -40,13 +46,24 @@ public class SendServiceImpl implements ISendService {
 
     @Override
     public List<SendInfosListHomeModel> sendInfosList(String email) {
+	//On instancie une liste avec les informations à afficher sur le menu home.
 	List<SendInfosListHomeModel> result = new ArrayList<>();
+	/*
+	 * On instancie une liste du modéle de l'entité send afin de récupérer 
+	 *toutes les données dont nous avons besoin pour la liste sendInfosList.
+	 */
 	List<SendModel> sendList = new ArrayList<>();
 	String sha256hexEmail = DigestUtils.sha256Hex(email);
 	UserModel userAuthor = new UserModel();
+	//On récupère les données de l'utilisateur via son email hasher.
 	userAuthor = userRepository.getByEmail(sha256hexEmail);
 	logger.debug("Search for the list of sends made by the user " + email);
-
+	/*
+	 * Si les données de l'utilisateur sont trouvés, nous récupérons la liste
+	 * de ses envois effectués, si celle-ci n'est pas vide, nous ajoutons
+	 * les données (prénom du bénéficiaire, description et montant) dans la
+	 * liste sendInfosList.
+	 */
 	if (userAuthor != null) {
 	    sendList = sendRepository.getByIdAuthor(userAuthor.getId());
 
@@ -79,7 +96,14 @@ public class SendServiceImpl implements ISendService {
 	boolean result = false;
 	boolean formTransfer;
 	formTransfer = formService.formTransferMoneyValid(transferMoney);
-
+	/*
+	 * On vérifie que le formulaire contient bien toutes les informations requises,
+	 * nous récupérons ensuite les données de l'utilisateur via son email hasher,
+	 * nous vérifions que le nom prénom inscrit sur le formulaire de transfert
+	 * correspond bien à ceux en base de données, si tout ceci est correct,
+	 * nous ajoutons le montant indiqué dans le formulaire dans le portefeuille
+	 * de l'utilisateur et le sauvegardons dans la base de données.
+	 */
 	if (formTransfer == true) {
 	    String sha256hexEmail = DigestUtils.sha256Hex(email);
 	    UserModel userAuthor = new UserModel();
@@ -111,6 +135,18 @@ public class SendServiceImpl implements ISendService {
     public boolean sendMoney(String email, SendModel sendModel) {
 	boolean result = false;
 	boolean formSendValid = formService.formSendValid(sendModel);
+	/*
+	 * On vérifie que le formulaire contient bien toutes les informations
+	 * nécessaires, on récupère ensuite les données de l'utilisateur via
+	 * son email hasher, on récupère les données de l'ami via son id,
+	 * on instancie une liste de l'entité user afin de pouvoir sauvegarder
+	 * en base de données les données mis à jour, si le resultat du montant
+	 * souhaité envoyer ajouter au prélévement de 0.5% est bien inférieur
+	 * au solde présent dans le portefeuille de l'utilisateur, alors nous
+	 * ajoutons toutes les données nécessaires à l'entité send instanciée afin
+	 * de sauvegarder les informations de l'envoi en base de donnée, puis nous
+	 * mettons à jour les portefeuilles des deux utilisateurs.
+	 */
 	if (formSendValid == true) {
 	    UserModel userAuthor = new UserModel();
 	    String sha256hexEmail = DigestUtils.sha256Hex(email);
@@ -169,7 +205,15 @@ public class SendServiceImpl implements ISendService {
 	boolean result = false;
 	boolean formWithdraw;
 	formWithdraw = formService.formTransferMoneyValid(transferMoney);
-
+	/*
+	 * On vérifie que le formulaire contient bien toutes les informations requises,
+	 * nous récupérons ensuite les données de l'utilisateur via son email hasher,
+	 * nous vérifions que le nom prénom inscrit sur le formulaire de transfert
+	 * correspond bien à ceux en base de données, puis nous vérifions également que
+	 * le montant est inferieur au solde du portefeuille de l'utilisateur,
+	 * si tout ceci est correct, nous retirons le montant indiqué dans le formulaire
+	 * du portefeuille de l'utilisateur et le sauvegardons dans la base de données.
+	 */
 	if (formWithdraw == true) {
 	    String sha256hexEmail = DigestUtils.sha256Hex(email);
 	    UserModel user = new UserModel();

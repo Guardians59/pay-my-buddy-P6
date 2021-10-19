@@ -1,0 +1,7 @@
+com.openclassrooms.paymybuddy
+com.openclassrooms.paymybuddy.controllers
+com.openclassrooms.paymybuddy.integration.controller
+com.openclassrooms.paymybuddy.models
+com.openclassrooms.paymybuddy.repository
+com.openclassrooms.paymybuddy.services
+com.openclassrooms.paymybuddy.services.impl
