@@ -80,7 +80,7 @@ public class FormServiceImpl implements IFormService {
 	 * On vérifie que le montant est bien supérieur à zéro auquel cas on renverra
 	 * false pour indiquer que l'envoi ne peut être exécuté.
 	 */
-	if(send.getAmountSend() == 0) {
+	if(send.getAmountSend() <= 0) {
 	    result = false;
 	}
 	return result;
